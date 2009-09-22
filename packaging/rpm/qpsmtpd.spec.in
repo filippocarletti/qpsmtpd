@@ -10,7 +10,7 @@ URL: http://smtpd.develooper.com/
 BuildRoot: %{_builddir}/%{name}-%{version}-%{release}-root
 BuildRequires: perl >= 0:5.00503
 BuildArchitectures: noarch
-Requires: perl(Mail::Header), perl(Net::DNS) perl(Net::IP) perl(IPC::Shareable)
+Requires: perl(Mail::Header), perl(Net::DNS) perl(Net::IP)
 
 Source0: %{name}-%{version}-%{release}.tar.gz
 Source1: qpsmtpd-forkserver.rc
@@ -20,6 +20,11 @@ Source4: qpsmtpd-xinetd
 Source5: in.qpsmtpd
 Source6: qpsmtpd.conf
 Source7: README.selinux
+
+Patch100: qpsmtpd-0.40-badrcptto_allowrelay.patch
+Patch101: qpsmtpd-0.83-peer_hooks.patch
+Patch102: qpsmtpd-0.83-clamd_conf.patch
+Patch103: qpsmtpd-0.83-clamav-headers.patch
 
 %description
 qpsmtpd is a flexible smtpd daemon written in Perl. Apart from the core
@@ -50,6 +55,11 @@ qpsmpd-async which uses it.
 
 %prep
 %setup -q -n %{name}-%{version}-%{release}
+%patch100 -p1
+%patch101 -p1
+%patch102 -p1
+%patch103 -p1
+
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL INSTALLSITELIB=%{_prefix}/lib/perl5/site_perl
@@ -97,6 +107,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf.d
 cp %{SOURCE6} ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf.d
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-apache-%{version}
 cp %{SOURCE7} $RPM_BUILD_ROOT%{_docdir}/%{name}-apache-%{version}
+rm -f ${RPM_BUILD_ROOT}%{_bindir}/%{name}-prefork
 
 [ -x /usr/lib/rpm/brp-compress ] && /usr/lib/rpm/brp-compress
 
@@ -157,6 +168,10 @@ then
 fi
 
 %changelog
+* Fri Sep 18 2009 <rpmbuild@robinbowes.com> 0.83-0.1sme
+- Update to 0.83
+- add sme specific patches
+
 * Sun Jul 12 2009 <rpmbuild@robinbowes.com> 0.82-0.1
 - Update to latest release
 - don't add qpsmtpd to start-up by default

@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' qpsmtpd-0.40/plugins/virus/clamav mezzanine_patched_qpsmtpd-0.40/plugins/virus/clamav
+--- qpsmtpd-0.40/plugins/virus/clamav	2007-06-14 11:57:23.000000000 -0600
++++ mezzanine_patched_qpsmtpd-0.40/plugins/virus/clamav	2007-06-15 13:37:26.000000000 -0600
+@@ -151,7 +151,7 @@
+   $self->{_max_size} ||= 512 * 1024;
+   $self->{_spool_dir} ||= $self->spool_dir();
+   $self->{_back_compat} ||= ''; # make sure something is set
+-  $self->{_clamd_conf} ||= '/etc/clamd/conf'; # make sure something is set
++  $self->{_clamd_conf} ||= '/etc/clamd.conf'; # make sure something is set
+   $self->{_declined_on_fail} ||= 0; # decline the message on clamav failure
+ 
+   unless ($self->{_spool_dir}) {

@@ -1,0 +1,23 @@
+diff -Nur -x '*.orig' -x '*.rej' qpsmtpd-0.40/plugins/virus/clamav mezzanine_patched_qpsmtpd-0.40/plugins/virus/clamav
+--- qpsmtpd-0.40/plugins/virus/clamav	2007-06-30 10:49:36.000000000 -0600
++++ mezzanine_patched_qpsmtpd-0.40/plugins/virus/clamav	2007-06-30 10:48:46.000000000 -0600
+@@ -212,8 +212,8 @@
+   if ($result == 1) {
+     $self->log(LOGINFO, "Virus(es) found: $output");
+     if ($self->{_action} eq 'add-header') {
+-        $transaction->header->add('X-Virus-Found', 'Yes');
+-        $transaction->header->add('X-Virus-Details', $output);
++        $transaction->header->add('X-Virus-Details', $output, 0);
++        $transaction->header->add('X-Virus-Found', 'Yes', 0);
+     } else {
+         return (DENY, "Virus Found: $output");
+     }
+@@ -224,7 +224,7 @@
+   }
+   else {
+     $transaction->header->add( 'X-Virus-Checked',
+-        "Checked by ClamAV on " . $self->qp->config("me") );
++        "Checked by ClamAV on " . $self->qp->config("me"), 0);
+   }
+   return (DECLINED);
+ } 
